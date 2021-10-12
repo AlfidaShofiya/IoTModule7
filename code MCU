@@ -1,0 +1,30 @@
+# berfungsi untuk import library yang tersedia
+from usb import *
+from time import *
+from gpio import *
+
+# membuat function main
+def main():
+	# untuk deklarasi usb 
+	usb = USB(0, 57600)
+    #  setting pinMode untuk menjalankan program
+	pinMode(0, IN)
+	pinMode(1, IN)
+	pinMode(2, IN)
+	pinMode(3, IN)
+	while True:
+		if digitalRead(0) == HIGH:
+			usb.write("kiri");
+		elif digitalRead(1) == HIGH:
+			usb.write("kanan");
+		elif digitalRead(2) == HIGH:
+			usb.write("atas");
+		elif digitalRead(3) == HIGH:
+			usb.write("bawah");
+		else:
+			usb.write("berhenti");
+		# berfungsi untuk menjeda waktu
+		delay(500)
+
+if _name_ == "_main_":
+	main()
