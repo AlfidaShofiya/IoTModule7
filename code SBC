@@ -1,0 +1,55 @@
+# berfungsi mengambil library
+from usb import *
+from time import *
+from gpio import *
+from ioeclient import *
+
+# membuat fungsi GetDir(x)
+def getDir(x):
+	if "atas" in x:
+		print("atas")
+		return "0"
+	elif "bawah" in x:
+		print("bawah")
+		return "1"
+	elif "kiri" in x:
+		print("kiri")
+		return "2"
+	elif "kanan" in x:
+		print("kanan")
+		return "3"
+	else:
+		print(x)
+		return "4"
+
+# fungsi main
+def main():
+    # memulai USB
+	usb = USB(0, 57600)
+
+	# setting registrasi server	pada IoEClient Cisco
+	IoEClient.setup({
+		"type": "SBC",
+		"states": [{
+			"name": "Direction",
+			"type": "options",
+			"options": {
+				"0" : "Up",
+				"1" : "Down",
+				"2" : "Left",
+				"3" : "Right",
+				"4" : "Stop"
+			},
+          
+			"controllable": False
+		}]
+	});
+
+	while True:
+		direction=""
+		while usb.inWaiting() > 0:
+			direction = usb.readLine()
+			IoEClient.reportStates(getDir(direction))
+		delay(500)
+if _name_ == "_main_":
+	main()
